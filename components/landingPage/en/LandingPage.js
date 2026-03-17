@@ -6,6 +6,7 @@ import CardCarousel from "../CardCarousel";
 import Link from 'next/link';
 
 import { useState, useEffect } from "react";
+import { Titan_One } from "next/font/google";
 
 export default function LandingPage() {
     const [logosData, setLogosData] = useState([]);
