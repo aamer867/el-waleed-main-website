@@ -1,48 +1,41 @@
+"use client";
 import React, { useEffect, useRef, useState } from 'react';
 
 const ContactUs = () => {
     const [isVisible, setIsVisible] = useState({ card1: false, card2: false });
+    const [contactInfo, setContactInfo] = useState(null);
     const card1Ref = useRef(null);
     const card2Ref = useRef(null);
+
+    useEffect(() => {
+        fetch("/api/contact-us-section")
+            .then(res => res.json())
+            .then(data => {setContactInfo(data)
+            console.log(data);
+    });
+        
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
                     if (entry.target === card1Ref.current) {
-                        setIsVisible(prevState => ({
-                            ...prevState,
-                            card1: entry.isIntersecting,
-                        }));
+                        setIsVisible(prev => ({ ...prev, card1: entry.isIntersecting }));
                     } else if (entry.target === card2Ref.current) {
-                        setIsVisible(prevState => ({
-                            ...prevState,
-                            card2: entry.isIntersecting,
-                        }));
+                        setIsVisible(prev => ({ ...prev, card2: entry.isIntersecting }));
                     }
                 });
             },
-            {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1,
-            }
+            { root: null, rootMargin: '0px', threshold: 0.1 }
         );
 
-        if (card1Ref.current) {
-            observer.observe(card1Ref.current);
-        }
-        if (card2Ref.current) {
-            observer.observe(card2Ref.current);
-        }
+        if (card1Ref.current) observer.observe(card1Ref.current);
+        if (card2Ref.current) observer.observe(card2Ref.current);
 
         return () => {
-            if (card1Ref.current) {
-                observer.unobserve(card1Ref.current);
-            }
-            if (card2Ref.current) {
-                observer.unobserve(card2Ref.current);
-            }
+            if (card1Ref.current) observer.unobserve(card1Ref.current);
+            if (card2Ref.current) observer.unobserve(card2Ref.current);
         };
     }, []);
 
@@ -52,30 +45,40 @@ const ContactUs = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div
                     ref={card1Ref}
-                    className={`bg-gray-100 rounded-lg shadow-lg p-8 transition-transform duration-1000 ease-out`}
+                    className="bg-gray-100 rounded-lg shadow-lg p-8 transition-transform duration-1000 ease-out"
                     style={{
                         transform: isVisible.card1 ? 'rotateY(0deg)' : 'rotateY(90deg)',
                         transformStyle: 'preserve-3d',
                     }}
                 >
-                    <div className="space-y-6">
-                        <div>
-                            <h2 className="text-2xl font-semibold mb-2">E-mail</h2>
-                            <p className="text-gray-700">info@el-waleed.com</p>
+                    {contactInfo ? (
+                        <div className="space-y-6">
+                            <div>
+                                <h2 className="text-2xl font-semibold mb-2">E-mail</h2>
+                                <p className="text-gray-700">{contactInfo.email}</p>
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-semibold mb-2">Phone</h2>
+                                <p className="text-gray-700">{contactInfo.phone}</p>
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-semibold mb-2">Address</h2>
+                                <p className="text-gray-700">{contactInfo.address}</p>
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-semibold mb-2">Opening Hours</h2>
+                                <p className="text-gray-700">{contactInfo.opening_hours}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="text-2xl font-semibold mb-2">Address</h2>
-                            <p className="text-gray-700">Al-Rowad Capital Building, Al-Raml 2, Alexandria</p>
-                        </div>
-                        <div>
-                            <h2 className="text-2xl font-semibold mb-2">Opening Hours</h2>
-                            <p className="text-gray-700">Saturday - Thursday: 09.00 AM - 05.00 PM</p>
-                        </div>
-                    </div>
+                    ) : (
+                        <p className="text-center text-gray-500">Loading...</p>
+                    )}
                 </div>
+
+                {/* Contact form card - unchanged */}
                 <div
                     ref={card2Ref}
-                    className={`bg-gray-100 rounded-lg shadow-lg p-8 transition-transform duration-1000 ease-out`}
+                    className="bg-gray-100 rounded-lg shadow-lg p-8 transition-transform duration-1000 ease-out"
                     style={{
                         transform: isVisible.card2 ? 'rotateY(0deg)' : 'rotateY(90deg)',
                         transformStyle: 'preserve-3d',
