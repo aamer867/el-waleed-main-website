@@ -1,66 +1,98 @@
 "use client";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import RotatingHeader from "./RotatingHeader";
 import BankLogos from "../BankLogos";
 import CardCarousel from "../CardCarousel";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function LandingPage() {
-    const logosData = [
-        { src: "/images/banks-companies/QNB-logo.png", alt: "شعار بنك الأهلي القطري", url: "https://www.qnb.com/sites/qnb/qnbegypt/page/en/en-home.html" },
-        { src: "/images/banks-companies/resized-photos/NBE-logo.png", alt: "شعار البنك الأهلي المصري", url: "https://www.nbe.com.eg" },
-        { src: "/images/banks-companies/bmp-logo.png", alt: "شعار بنك مصر", url: "https://www.banquemisr.com" },
-        { src: "/images/banks-companies/fabmisr-logo.jpg", alt: "شعار بنك أبوظبي الأول", url: "https://bankfab.com" },
-        { src: "/images/banks-companies/resized-photos/abk-logo.png", alt: "شعار البنك الأهلي الكويتي", url: "https://www.abk.east" },
-    ];
-    const cardsData = [
-        {
-            title: "الضرائب",
-            imageUrl: "/images/card-side-animation-1.jpg",
-            imageAlt: "رجل يمسك بقلم ويكتب على ورقة",
-            description: "نقدم لك مجموعة واسعة من الخدمات لتلبية احتياجاتك الضريبية المحددة"
-        },
-        {
-            title: "المراجعات الضريبية",
-            imageUrl: "/images/card-side-animation-2.jpg",
-            imageAlt: "رجل يمسك بقلم ويكتب على ورقة",
-            description: "نستخدم أحدث التقنيات والأدوات لإدارة شؤونك المالية"
-        },
-        {
-            title: "التمويل",
-            imageUrl: "/images/card-side-animation-3.jpg",
-            imageAlt: "رجل يمسك بقلم ويكتب على ورقة",
-            description: "خبراء في تقديم خدمات التمويل والاستثمار المتكاملة"
-        },
-        {
-            title: "دراسة الجدوى",
-            imageUrl: "/images/card-side-animation-4.jpg",
-            imageAlt: "رجل يمسك بقلم ويكتب على ورقة",
-            description: "خطط بذكاء لاتخاذ قرار استثماري موثوق"
-        }
-    ];
-    
-    return(
-        <>
-        <div className="bg-gradient-to-b from-rose-100 via-white to-white z-10 relative pt-12 pb-14">
-            <div className="container mx-auto items-center px-8">
-                <div className="grid lg:grid-cols-12 grid-cols-1 pt-12 pb-18 justify-center items-center">
-                    <div className="col-start-1 col-end-8">
-                        <RotatingHeader />
-                        {/* <h1 className="text-6xl text-main-blue-color">يمكننا خدمتك في <span className="text-main-red-color font-bold">الضرائب</span></h1> */}
-                        <p className="text-center lg:text-2xl py-3 text-main-blue-color">فريق محترف من المستشارين الماليين والمحاسبين القانونيين وخبراء الضرائب يضمن أن يصل عملك إلى أعلى مستويات النجاح</p>
-                        <div class="flex justify-center">
-                            <Link href="/services" class="bg-blue-500 text-white text-lg font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 mb-6">
-                                خدماتنا
-                            </Link>
-                        </div>
-                    </div>
-                    <CardCarousel cardsData={cardsData}/>
-                </div>
-                <BankLogos images={logosData} />
-                <p className="text-center text-sm lg:text-lg">مهتم بالعمل مع الوليد؟ <a className="text-main-red-color" href="#contactus">تواصل معنا</a></p>
+  const [logosData, setLogosData] = useState([]);
+  const [cardsData, setCardsData] = useState([]);
+  const [sectionData, setSectionData] = useState(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    const fetchSection = async () => {
+      try {
+        const response = await fetch("/api/landing-page-content");
+        const data = await response.json();
+        setSectionData(data.section);
+      } catch (error) {
+        console.error("Error fetching section data:", error);
+      }
+    };
+
+    const fetchLogos = async () => {
+      try {
+        const response = await fetch("/api/bank-logos_ar");
+        const data = await response.json();
+        const mapped = data.cards.map((card) => ({
+          src: card.image_url,
+          alt: card.name,
+          url: card.link,
+        }));
+        setLogosData(mapped);
+      } catch (error) {
+        console.error("Error fetching bank logos:", error);
+      }
+    };
+
+    const fetchCards = async () => {
+      try {
+        const response = await fetch("/api/landing-page-cards-data_ar");
+        const data = await response.json();
+        const mapped = data.cards.map((card) => ({
+          title: card.header,
+          imageUrl: card.image_url,
+          imageAlt: card.title,
+          description: card.description,
+        }));
+        setCardsData(mapped);
+      } catch (error) {
+        console.error("Error fetching landing cards:", error);
+      }
+    };
+
+    fetchSection();
+    fetchLogos();
+    fetchCards();
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <>
+      <div className="bg-gradient-to-b from-rose-100 via-white to-white z-10 relative pt-12 pb-14">
+        <div className="container mx-auto items-center px-8">
+          <div className="grid lg:grid-cols-12 grid-cols-1 pt-12 pb-18 justify-center items-center">
+            <div className="col-start-1 col-end-8">
+              <RotatingHeader />
+              <p className="text-center lg:text-2xl py-3 text-main-blue-color">
+                {sectionData?.description_ar ?? ""}
+              </p>
+              <div className="flex justify-center">
+                <Link
+                  href="/services"
+                  className="bg-blue-500 text-white text-lg font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 mb-6"
+                >
+                  خدماتنا
+                </Link>
+              </div>
             </div>
+            <CardCarousel cardsData={cardsData} />
+          </div>
+          <BankLogos images={logosData} />
+          <p className="text-center text-sm lg:text-lg">
+            مهتم بالعمل مع الوليد؟{" "}
+            <a className="text-main-red-color" href="#contactus">
+              تواصل معنا
+            </a>
+          </p>
         </div>
-        </>
-    );
+      </div>
+    </>
+  );
 }
