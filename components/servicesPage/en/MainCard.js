@@ -11,33 +11,6 @@ export default function MainCard() {
                     <p>A professional team of financial advisors, chartered accountants, and tax experts ensures that your business reaches the highest levels of success</p>
                 </div>
             </div>
-
-            <style jsx>{`
-                .animate-slide-left, .animate-slide-right {
-                    opacity: 0;
-                    transform: translateX(-50%);
-                    animation: slide-in-x 1s ease-out forwards;
-                }
-                
-                .animate-slide-left {
-                    animation-delay: 0.5s;
-                }
-
-                .animate-slide-right {
-                    animation-delay: 0.5s;
-                }
-
-                @keyframes slide-in-x {
-                    0% {
-                        opacity: 0;
-                        transform: translateX(50%);
-                    }
-                    100% {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-            `}</style>
         </>
     );
 }

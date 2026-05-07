@@ -1,24 +1,117 @@
-export default function Card({ header, description, imageUrl, textDir }) {
+export default function Card({
+    header,
+    description,
+    imageUrl
+}) {
+    const group1 = (description?.[0] || "")
+        .split("++")
+        .map((i) => i.trim())
+        .filter(Boolean);
+
+    const group2 = (description?.[1] || "")
+        .split("++")
+        .map((i) => i.trim())
+        .filter(Boolean);
+
     return (
         <div
-            className="relative hover:h-[500px] h-52 bg-cover bg-center transition-all duration-500 ease-in-out overflow-hidden"
-            style={{ backgroundImage: `url(${imageUrl})` }}
+            className="
+                relative
+                w-full
+                h-[450px]
+                bg-cover
+                bg-center
+                overflow-hidden
+                flex
+                items-center
+            "
+            style={{
+                backgroundImage: `url(${imageUrl})`
+            }}
         >
-            {/* Black overlay */}
-            <div className="absolute inset-0 bg-white opacity-40"></div>
 
-            {/* Content */}
-            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 text-main-blue-color grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-6 md:py-8 lg:py-12 h-full">
-                <h1 className={`text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold col-span-1 md:col-span-2 lg:col-span-1 self-start text-center ${textDir}`}>
-                    {header}
-                </h1>
-                <ul className="text-base sm:text-lg md:text-xl lg:text-2xl col-span-1 md:col-span-2 list-disc pl-4 md:pl-6 lg:pl-8 space-y-2 self-center">
-                    {description.map((service, index) => (
-                        <li key={index} className="font-bold">
-                            {service}
-                        </li>
-                    ))}
-                </ul>
+            {/* CONTENT BOX */}
+            <div className="relative z-10 w-full flex justify-center">
+
+                <div className="
+                    w-full
+                    h-[80%]
+                    flex
+                    items-center
+                    bg-gradient-to-r
+                    from-blue-900/80
+                    via-slate-900/70
+                    to-red-900/80
+                ">
+
+                    <div className="
+                        w-full
+                        grid
+                        grid-cols-1
+                        lg:grid-cols-3
+                        items-start
+                        gap-8
+                        px-6
+                        lg:px-20
+                        py-6
+                    ">
+
+                        {/* TITLE */}
+                        <h1 className="
+                            text-3xl
+                            sm:text-4xl
+                            lg:text-6xl
+                            font-bold
+                            text-white
+                            text-center
+                            lg:text-right
+                        ">
+                            {header}
+                        </h1>
+
+                        {/* GROUP 1 */}
+                        <ul className="
+                            space-y-2
+                            sm:space-y-3
+                            text-base
+                            sm:text-lg
+                            lg:text-2xl
+                            font-medium
+                            text-white
+                            text-center
+                            lg:text-right
+                        ">
+                            {group1.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3 justify-center lg:justify-end">
+                                    <span className="text-blue-400 text-lg sm:text-xl leading-none">•</span>
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* GROUP 2 */}
+                        <ul className="
+                            space-y-2
+                            sm:space-y-3
+                            text-base
+                            sm:text-lg
+                            lg:text-2xl
+                            font-medium
+                            text-white
+                            text-center
+                            lg:text-right
+                        ">
+                            {group2.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3 justify-center lg:justify-end">
+                                    <span className="text-red-400 text-lg sm:text-xl leading-none">•</span>
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+
+                    </div>
+
+                </div>
             </div>
         </div>
     );
