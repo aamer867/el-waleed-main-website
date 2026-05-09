@@ -1,5 +1,6 @@
 "use client";
-import Footer from "../../../components/footer/en/Footer";
+import FooterEn from "../../../components/footer/en/Footer";
+import FooterAr from "../../../components/footer/ar/Footer";
 import NavbarEn from "../../../components/navbar/en/Navbar";
 import NavbarAr from "../../../components/navbar/ar/Navbar";
 import Card from "../../../components/servicesPage/Card";
@@ -66,7 +67,7 @@ export default function Services() {
               textDir={"md:text-right"}
             />
           ))}
-          <Footer />
+          <FooterAr />
         </div>
       ) : (
         <div dir="ltr">
@@ -86,7 +87,7 @@ export default function Services() {
               textDir={"md:text-left"}
             />
           ))}
-          <Footer />
+          <FooterEn />
         </div>
       )}
     </>
