@@ -1,51 +1,91 @@
-import React from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faLinkedinIn, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
-    return (
-        <footer className="bg-gray-800 text-white py-6">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row justify-between items-center">
-                    {/* Logo Section */}
-                    <div className="mb-6 md:mb-0 flex items-center">
-                        <img src="/images/logo/logo.jpg" alt="شعار الشركة" className="w-24 h-auto mr-4" />
-                        <h1 className="text-xl font-semibold">الوليد</h1>
-                    </div>
+  const [footerData, setFooterData] = useState(null);
+  const [contactInfo, setContactInfo] = useState(null);
 
-                    {/* Contact Section */}
-                    <div className="mb-6 md:mb-0">
-                        <h2 className="text-xl font-semibold mb-2">اتصل بنا</h2>
-                        <p className="text-gray-400">info@el-waleed.com</p>
-                        <p className="text-gray-400">مبنى الرواد كابيتال، الرمل 2، الإسكندرية</p>
-                        <p className="text-gray-400">السبت - الخميس: 09:00 ص - 05:00 م</p>
-                    </div>
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const response = await fetch("/api/header_footer");
+        const data = await response.json();
+        setFooterData(data);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
 
-                    {/* Social Media Section */}
-                    <div className="mb-6 md:mb-0">
-                        <h2 className="text-xl font-semibold mb-2">تابعنا</h2>
-                        <div className="flex space-x-4">
-                            <a href="#" className="text-gray-400 hover:text-main-blue-color">
-                                <FontAwesomeIcon icon={faFacebookF} />
-                            </a>
-                            <a href="#" className="text-gray-400 hover:text-main-blue-color">
-                                <FontAwesomeIcon icon={faTwitter} />
-                            </a>
-                            <a href="#" className="text-gray-400 hover:text-main-blue-color">
-                                <FontAwesomeIcon icon={faLinkedinIn} />
-                            </a>
-                            <a href="#" className="text-gray-400 hover:text-main-blue-color">
-                                <FontAwesomeIcon icon={faInstagram} />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div className="mt-6 text-center">
-                    <p className="text-gray-400">© {new Date().getFullYear()}الوليد جميع الحقوق محفوظة.</p>
-                </div>
+    const fetchContact = async () => {
+      try {
+        const response = await fetch("/api/contact-us-section_ar");
+        const data = await response.json();
+        setContactInfo(data.cards?.[0]);
+      } catch (error) {
+        console.error("Error fetching contact info:", error);
+      }
+    };
+
+    fetchFooter();
+    fetchContact();
+  }, []);
+
+  return (
+    <footer dir="rtl" className="bg-gray-800 text-white">
+      <div className="container mx-auto px-8 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {/* Column 1 - Logo */}
+          <div className="flex flex-col items-center md:items-start">
+            <img
+              src={footerData?.image_url ?? "/images/logo/logo.jpg"}
+              alt="شعار الشركة"
+              className="w-24 h-auto mb-3"
+            />
+            <h1 className="text-xl font-bold">الوليد</h1>
+          </div>
+
+          {/* Column 2 - Contact */}
+          <div className="flex flex-col items-center md:items-start">
+            <h2 className="text-lg font-bold mb-3 text-main-red-color">اتصل بنا</h2>
+            <p className="text-gray-400 mb-1">{contactInfo?.email ?? ""}</p>
+            <p className="text-gray-400 mb-1">{contactInfo?.phone ?? ""}</p>
+            <p className="text-gray-400 mb-1">{contactInfo?.address ?? ""}</p>
+            <p className="text-gray-400">{contactInfo?.opening_hours ?? ""}</p>
+          </div>
+
+          {/* Column 3 - Social */}
+          <div className="flex flex-col items-center md:items-start">
+            <h2 className="text-lg font-bold mb-3 text-main-red-color">تابعنا</h2>
+            <div className="flex gap-6">
+              <a href={footerData?.faceBookLink ?? "#"} className="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center">
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
+              <a href={footerData?.xLink ?? "#"} className="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center">
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+              <a href={footerData?.linkedInLink ?? "#"} className="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center">
+                <FontAwesomeIcon icon={faLinkedinIn} />
+              </a>
+              <a href={footerData?.instagramLink ?? "#"} className="text-gray-400 hover:text-white text-xl w-8 h-8 flex items-center justify-center">
+                <FontAwesomeIcon icon={faInstagram} />
+              </a>
             </div>
-        </footer>
-    );
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-600 mt-8 pt-4 text-center">
+          <p className="text-gray-400 text-sm">
+            © {new Date().getFullYear()} الوليد — جميع الحقوق محفوظة.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;
