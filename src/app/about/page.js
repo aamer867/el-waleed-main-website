@@ -15,15 +15,36 @@ export default function About() {
   const [language, setLanguage] = useState("ar");
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setLanguage(localStorage.getItem("languageLocalStorage") || "ar");
-    }
+    const storedLanguage =
+      typeof window !== "undefined"
+        ? localStorage.getItem("languageLocalStorage") || "ar"
+        : "ar";
+
+    setLanguage(storedLanguage);
+
+    const fetchAboutCards = async () => {
+      try {
+        const endpoint = storedLanguage === "ar"
+          ? "/api/about_page_vision_parts_ar"
+          : "/api/about_page_vision_parts_en";
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        setAboutCards(data.cards);
+      } catch (error) {
+        console.error("Error fetching about cards:", error);
+      }
+    };
+
+    fetchAboutCards();
   }, []);
 
   useEffect(() => {
     const fetchAboutCards = async () => {
       try {
-        const response = await fetch("/api/about_page_vision_parts_ar");
+        const endpoint = language === "ar"
+          ? "/api/about_page_vision_parts_ar"
+          : "/api/about_page_vision_parts_en";
+        const response = await fetch(endpoint);
         const data = await response.json();
         setAboutCards(data.cards);
       } catch (error) {
@@ -31,7 +52,7 @@ export default function About() {
       }
     };
     fetchAboutCards();
-  }, []);
+  }, [language]);
 
   const handleLanguageToggle = () => {
     const newLanguage = language === "ar" ? "en" : "ar";
@@ -48,7 +69,6 @@ export default function About() {
       {isAr ? (
         <div dir="rtl" className="font-cairo">
           <NavbarAr
-            imageUrl={"/images/logo/logo.jpg"}
             pageLabel={"About"}
             language={language}
             onLanguageToggle={handleLanguageToggle}
@@ -70,7 +90,6 @@ export default function About() {
       ) : (
         <div dir="ltr">
           <NavbarEn
-            imageUrl={"/images/logo/logo.jpg"}
             pageLabel={"About"}
             language={language}
             onLanguageToggle={handleLanguageToggle}

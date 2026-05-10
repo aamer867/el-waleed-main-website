@@ -12,30 +12,37 @@ export default function Services() {
   const [language, setLanguage] = useState("ar");
   const [servicesData, setServicesData] = useState([]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setLanguage(localStorage.getItem("languageLocalStorage") || "ar");
+  const fetchServices = async (lang) => {
+    try {
+      const endpoint = lang === "ar"
+        ? "/api/services_page_body_ar"
+        : "/api/services_page_body_en";
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      const mapped = data.cards.map((card) => ({
+        ...card,
+        description: Array.isArray(card.description)
+          ? card.description
+          : [card.description],
+      }));
+      setServicesData(mapped);
+    } catch (error) {
+      console.error("Error fetching services:", error);
     }
+  };
+
+  useEffect(() => {
+    const storedLanguage =
+      typeof window !== "undefined"
+        ? localStorage.getItem("languageLocalStorage") || "ar"
+        : "ar";
+    setLanguage(storedLanguage);
+    fetchServices(storedLanguage);
   }, []);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await fetch("/api/services_page_body_ar"); // correct endpoint
-        const data = await response.json();
-        const mapped = data.cards.map((card) => ({
-          ...card,
-          description: Array.isArray(card.description)
-            ? card.description
-            : [card.description],
-        }));
-        setServicesData(mapped);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      }
-    };
-    fetchServices();
-  }, []);
+    fetchServices(language);
+  }, [language]);
 
   const handleLanguageToggle = () => {
     const newLanguage = language === "ar" ? "en" : "ar";
@@ -52,7 +59,6 @@ export default function Services() {
       {isAr ? (
         <div dir="rtl" className="font-cairo">
           <NavbarAr
-            imageUrl={"/images/logo/logo.jpg"}
             pageLabel={"Services"}
             language={language}
             onLanguageToggle={handleLanguageToggle}
@@ -61,7 +67,7 @@ export default function Services() {
           {servicesData.map((card, index) => (
             <Card
               key={index}
-              header={card.title}
+              header={card.header}
               description={card.description}
               imageUrl={card.image_url}
               textDir={"md:text-right"}
@@ -72,7 +78,6 @@ export default function Services() {
       ) : (
         <div dir="ltr">
           <NavbarEn
-            imageUrl={"/images/logo/logo.jpg"}
             pageLabel={"Services"}
             language={language}
             onLanguageToggle={handleLanguageToggle}
@@ -81,7 +86,7 @@ export default function Services() {
           {servicesData.map((card, index) => (
             <Card
               key={index}
-              header={card.title}
+              header={card.header}
               description={card.description}
               imageUrl={card.image_url}
               textDir={"md:text-left"}
