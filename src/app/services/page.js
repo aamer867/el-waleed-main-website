@@ -67,7 +67,7 @@ export default function Services() {
           {servicesData.map((card, index) => (
             <Card
               key={index}
-              header={card.header}
+              header={card.title}
               description={card.description}
               imageUrl={card.image_url}
               textDir={"md:text-right"}
@@ -86,7 +86,7 @@ export default function Services() {
           {servicesData.map((card, index) => (
             <Card
               key={index}
-              header={card.header}
+              header={card.title}
               description={card.description}
               imageUrl={card.image_url}
               textDir={"md:text-left"}
