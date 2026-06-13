@@ -87,7 +87,7 @@ export default function LandingPage() {
           <BankLogos images={logosData} />
           <p className="text-center text-sm lg:text-lg">
             مهتم بالعمل مع الوليد؟{" "}
-            <a className="text-main-red-color" href="#contactus">
+            <a className="text-main-red-color" href="#contactUs">
               تواصل معنا
             </a>
           </p>
