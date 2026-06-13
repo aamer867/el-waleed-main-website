@@ -3,14 +3,14 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const [rows] = await db.query(
-      "SELECT data FROM subsections WHERE id='C12'"
+      "SELECT data_en FROM subsections WHERE id='C12'"
     );
 
     if (!rows.length) {
       return Response.json({ error: "No data found" }, { status: 404 });
     }
 
-    const rawData = rows[0].data;
+    const rawData = rows[0].data_en;
     const parsed = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
 
     return Response.json({ images: parsed.cards.map(card => card.image_url) });
