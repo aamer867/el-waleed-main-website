@@ -8,10 +8,11 @@ export default function Card({ direction, imageUrl, imageAlt, header, descriptio
                     direction === 1 ? "lg:order-2 order-1" : "lg:order-1 order-2"
                 } text-center px-6 lg:px-12 w-full my-10 ${textDir}`}
             >
-                <h1 className="text-3xl lg:text-5xl font-bold mb-6 lg:mb-8 leading-tight">
+                <h1 className="text-3xl lg:text-5xl font-bold mb-6 lg:mb-8 leading-tight text-red-600">
                     {header}
                 </h1>
-                <p className="text-lg lg:text-xl text-gray-700 leading-relaxed lg:leading-loose">
+
+                <p className="text-lg lg:text-xl text-blue-600 leading-relaxed lg:leading-loose">
                     {description}
                 </p>
             </div>

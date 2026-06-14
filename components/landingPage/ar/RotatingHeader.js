@@ -89,14 +89,16 @@ const RotatingHeader = () => {
     <h1
       className="
         text-center
-        text-4xl
         lg:text-right
         lg:text-6xl
         text-main-blue-color
       "
     >
-      {headerText}{" "}
-      <span className="text-main-red-color font-bold">{displayedText}</span>
+      <span>{headerText} </span>
+
+      <span className="text-main-red-color font-bold text-base">
+        {displayedText}
+      </span>
     </h1>
   );
 };

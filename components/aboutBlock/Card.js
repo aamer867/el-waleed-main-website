@@ -20,14 +20,14 @@ export default function Card({
             }}
             className={`w-full text-white rounded-[20px] sm:px-[80px] sm:py-[40px] px-[40px] py-[40px] text-center ${textDir}`}
         >
-            <h2 className="font-semibold mb-3 text-lg sm:text-2xl">
+            <h2 className="font-semibold mb-3 text-2xl sm:text-4xl">
                 {title}
             </h2>
 
             <div className="py-3 grid md:grid-cols-2 justify-center">
                 
                 <div className="mb-4 pr-4">
-                    <h4 className="text-2xl sm:text-4xl font-semibold mb-6">
+                    <h4 className="text-lg sm:text-2xl font-semibold mb-6">
                         {header}
                     </h4>
 
