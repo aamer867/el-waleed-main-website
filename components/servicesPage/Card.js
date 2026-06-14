@@ -16,7 +16,7 @@ export default function Card({ header, description, imageUrl }) {
       style={{ backgroundImage: `url(${imageUrl})` }}
     >
       <div className="relative z-10 w-full">
-        <div className="w-full bg-gradient-to-r from-blue-500/10 via-slate-500/10 to-red-500/10 bg-white/70">
+        <div className="w-full bg-gradient-to-r from-blue-500/10 via-slate-500/10 to-red-500/10 bg-white/75">
           <div className="w-full flex flex-col sm:flex-row px-4 sm:px-6 lg:px-20 py-6 sm:py-8 items-center gap-4 sm:gap-8">
 
             {/* TITLE */}
