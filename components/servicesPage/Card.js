@@ -51,8 +51,6 @@ export default function Card({ header, description, imageUrl }) {
                 </li>
               ))}
             </ul>
-
-            
           </div>
         </div>
       </div>
